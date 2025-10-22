@@ -8,20 +8,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
    // Smooth parallax using requestAnimationFrame with lerp
    if (hero) {
-      const parallaxElements = Array.from(document.querySelectorAll("[data-depth]"));
+      const parallaxElements = Array.from(
+         document.querySelectorAll("[data-depth]")
+      );
       const shapes = Array.from(document.querySelectorAll(".shape"));
 
       // targets
-      let targetMouseX = 0, targetMouseY = 0;
-      let currentMouseX = 0, currentMouseY = 0;
+      let targetMouseX = 0,
+         targetMouseY = 0;
+      let currentMouseX = 0,
+         currentMouseY = 0;
       let targetScroll = window.pageYOffset || 0;
       let currentScroll = targetScroll;
 
       let centerX = window.innerWidth / 2;
       let centerY = window.innerHeight / 2;
 
-      const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isReducedMotion = window.matchMedia(
+         "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
       // clamp helper
       const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -30,17 +36,21 @@ document.addEventListener("DOMContentLoaded", () => {
       const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
 
       if (!isTouch && !isReducedMotion) {
-         document.addEventListener('mousemove', (e) => {
+         document.addEventListener("mousemove", (e) => {
             targetMouseX = e.clientX - centerX;
             targetMouseY = e.clientY - centerY;
          });
       }
 
-      window.addEventListener('scroll', () => {
-         targetScroll = window.pageYOffset || 0;
-      }, { passive: true });
+      window.addEventListener(
+         "scroll",
+         () => {
+            targetScroll = window.pageYOffset || 0;
+         },
+         { passive: true }
+      );
 
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
          centerX = window.innerWidth / 2;
          centerY = window.innerHeight / 2;
       });
@@ -56,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
          const normY = currentMouseY / centerY;
 
          // apply transforms to parallax elements
-         parallaxElements.forEach(el => {
-            const depth = parseFloat(el.getAttribute('data-depth')) || 0;
+         parallaxElements.forEach((el) => {
+            const depth = parseFloat(el.getAttribute("data-depth")) || 0;
             // combine scroll and mouse influence
             const scrollOffset = -(currentScroll * depth * 0.6);
             const mouseXMove = normX * depth * 28;
@@ -65,14 +75,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // apply with subtle rotation for depth
             const rot = normX * depth * 6;
-            el.style.transform = `translate3d(${mouseXMove}px, ${mouseYMove + scrollOffset}px, 0) rotate(${rot}deg)`;
+            el.style.transform = `translate3d(${mouseXMove}px, ${
+               mouseYMove + scrollOffset
+            }px, 0) rotate(${rot}deg)`;
          });
 
          // shapes move more pronouncedly
          shapes.forEach((shape, i) => {
-            const depth = parseFloat(shape.getAttribute('data-depth')) || (0.06 + i * 0.02);
+            const depth =
+               parseFloat(shape.getAttribute("data-depth")) || 0.06 + i * 0.02;
             const sx = normX * (i + 1) * 34 * depth * 2;
-            const sy = normY * (i + 1) * 34 * depth * 2 - (currentScroll * depth * 0.08);
+            const sy =
+               normY * (i + 1) * 34 * depth * 2 - currentScroll * depth * 0.08;
             shape.style.transform = `translate3d(${sx}px, ${sy}px, 0)`;
          });
 
