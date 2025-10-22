@@ -12,12 +12,103 @@ body {
       Roboto, "Helvetica Neue", Arial;
 }
 
-.hero-gradient {
-   background: linear-gradient(
-      135deg,
-      rgba(99, 102, 241, 0.08),
-      rgba(236, 72, 153, 0.04)
+/* Hero section with parallax and mouse tracking */
+.hero-section {
+   position: relative;
+   min-height: 100vh;
+   background: linear-gradient(135deg, 
+      rgba(99, 102, 241, 0.08) 0%,
+      rgba(99, 102, 241, 0.02) 100%
    );
+   overflow: hidden;
+}
+
+.hero-content {
+   position: relative;
+   z-index: 2;
+}
+
+.floating-shapes {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   pointer-events: none;
+   z-index: 1;
+}
+
+.shape {
+   position: absolute;
+   background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(99, 102, 241, 0.1));
+   border-radius: 50%;
+   transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.shape-1 {
+   width: 300px;
+   height: 300px;
+   left: -150px;
+   top: 10%;
+   background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(99, 102, 241, 0.08));
+}
+
+.shape-2 {
+   width: 500px;
+   height: 500px;
+   right: -250px;
+   top: 15%;
+   background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(236, 72, 153, 0.08));
+}
+
+.parallax-img {
+   transition: transform 0.1s cubic-bezier(0.2, 0.9, 0.2, 1);
+   will-change: transform;
+}
+
+/* additional layered visuals */
+.floating-shapes svg { position: absolute; z-index: 0; mix-blend-mode: screen; }
+.floating-shapes .shape { mix-blend-mode: screen; opacity: 0.95; }
+
+/* subtle float for bigger shapes */
+@keyframes gentleFloat {
+   0% { transform: translateY(0px) translateX(0px); }
+   50% { transform: translateY(-18px) translateX(6px); }
+   100% { transform: translateY(0px) translateX(0px); }
+}
+.shape-1 { animation: gentleFloat 9s ease-in-out infinite; }
+.shape-2 { animation: gentleFloat 11s ease-in-out infinite; }
+
+/* small decorative blobs float with different timing */
+.floating-shapes .shape[style] { opacity: 0.9; transform-origin: center; animation: gentleFloat 8s ease-in-out infinite; }
+
+/* accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+   .shape-1, .shape-2, .floating-shapes .shape[style], .parallax-img { animation: none !important; transition: none !important; }
+}
+
+.hero-card {
+   backdrop-filter: blur(10px);
+   background: rgba(255, 255, 255, 0.95);
+   border: 1px solid rgba(255, 255, 255, 0.2);
+   transform: translateZ(0);
+}
+
+.hero-title {
+   transform: translateZ(0);
+   background: linear-gradient(135deg, #111827 0%, #4F46E5 100%);
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   background-clip: text;
+}
+
+.perspective-1000 {
+   perspective: 1000px;
+}
+
+[data-depth] {
+   transform-style: preserve-3d;
+   will-change: transform;
 }
 
 .btn-accent {
